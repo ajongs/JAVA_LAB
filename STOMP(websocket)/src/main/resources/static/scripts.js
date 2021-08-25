@@ -12,14 +12,16 @@ $(document).ready(function() {
         sendPrivateMessage();
     });
 });
+let nickname = sessionStorage.getItem('access_token')
+let headers = {Authorization: nickname}
 
 function connect() {
     var socket = new SockJS('/ws/stomp/chat');
     stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
+    stompClient.connect(headers, function (frame) {
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/sub/messages', function (message) {
-            showMessage(JSON.parse(message.body).content);
+        stompClient.subscribe('/sub/messages/'+nickname, function (message) {
+            showMessage(message.body);
         });
 
         //stompClient.subscribe('/user/topic/private-messages', function (message) {
@@ -34,7 +36,8 @@ function showMessage(message) {
 
 function sendMessage() {
     console.log("sending message");
-    stompClient.send("/pub/message", {}, JSON.stringify({'messageContent': $("#message").val()}));
+    stompClient.send("/pub/message", headers, JSON.stringify({'messageContent': $("#message").val(),
+    'receiver':$("#receiver").val()}));
 }
 
 function sendPrivateMessage() {
