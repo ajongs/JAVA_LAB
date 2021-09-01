@@ -12,6 +12,7 @@ $(document).ready(function() {
         sendPrivateMessage();
     });
 });
+
 let nickname = sessionStorage.getItem('access_token')
 let headers = {Authorization: nickname}
 
@@ -44,3 +45,4 @@ function sendPrivateMessage() {
     console.log("sending private message");
     stompClient.send("/pub/private-message", {}, JSON.stringify({'messageContent': $("#private-message").val()}));
 }
+

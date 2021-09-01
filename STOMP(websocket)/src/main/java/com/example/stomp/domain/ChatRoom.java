@@ -1,45 +1,60 @@
 package com.example.stomp.domain;
 
-import org.springframework.web.socket.WebSocketSession;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.sql.Timestamp;
 
 public class ChatRoom {
-    private String roomId;
-    private String name;
-    private Set<WebSocketSession> sessions = new HashSet<>();
+    private long id;
+    private String user1;
+    private String user2;
+    private String chatTitle;
+    private String chatText;
+    private Timestamp update_time;
 
-    public static ChatRoom create(String name){
-        ChatRoom chatRoom = new ChatRoom();
-
-        chatRoom.roomId = UUID.randomUUID().toString();
-        chatRoom.name = name;
-        return chatRoom;
+    public long getId() {
+        return id;
     }
 
-    public String getRoomId() {
-        return roomId;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public void setRoomId(String roomId) {
-        this.roomId = roomId;
+    public String getChatTitle() {
+        return chatTitle;
     }
 
-    public String getName() {
-        return name;
+    public void setChatTitle(String chatTitle) {
+        this.chatTitle = chatTitle;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Timestamp getUpdate_time() {
+        return update_time;
     }
 
-    public Set<WebSocketSession> getSessions() {
-        return sessions;
+    public void setUpdate_time(Timestamp update_time) {
+        this.update_time = update_time;
     }
 
-    public void setSessions(Set<WebSocketSession> sessions) {
-        this.sessions = sessions;
+    public String getUser1() {
+        return user1;
+    }
+
+    public void setUser1(String user1) {
+        this.user1 = user1;
+    }
+
+    public String getUser2() {
+        return user2;
+    }
+
+    public void setUser2(String user2) {
+        this.user2 = user2;
+    }
+
+    public String getChatText() {
+        return chatText;
+    }
+
+    public void setChatText(String chatText) {
+        this.chatText = chatText;
     }
 }

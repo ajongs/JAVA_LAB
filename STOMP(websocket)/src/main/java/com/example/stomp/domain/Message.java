@@ -1,9 +1,29 @@
 package com.example.stomp.domain;
 
+import java.sql.Timestamp;
+
 public class Message {
+    private long id;
     private String receiver;
     private String sender;
     private String messageContent;
+    private Timestamp created_at;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Timestamp getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(Timestamp created_at) {
+        this.created_at = created_at;
+    }
 
     public String getReceiver() {
         return receiver;
