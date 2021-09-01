@@ -15,4 +15,9 @@
         INSERT INTO chatroom
         VALUES(null, #{user1}, #{user2}, #{chatTitle}, #{chatText}, now())
     </insert>
+    <update id="updateChatText" parameterType="Message">
+        UPDATE chatroom
+        SET chatText=#{messageContent}
+        WHERE user2=#{sender}
+    </update>
 </mapper>
