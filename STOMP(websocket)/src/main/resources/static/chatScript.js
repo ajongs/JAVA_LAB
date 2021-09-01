@@ -5,7 +5,7 @@ $(document).ready(function(message) {
     fetch('http://localhost:8080/rooms', {
         method: "GET",
         headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json;charset=utf-8",
             "Authorization": nickname
         }
         /*,
@@ -112,7 +112,13 @@ function connect() {
 }
 
 function showChatRoom(json){
-    $("#Chat-lists").append("<tr><td id=\""+json.user2+"\"><br>" + json.user2 + "</br><br>" + json.chatText+ "</br><br></br></td></tr>");
+    let user="";
+    if(json.user2!=nickname){
+        user = json.user2;
+    }
+    else
+        user = json.user1;
+    $("#Chat-lists").append("<tr><td id=\""+user+"\"><br>" + user + "</br><br>" + json.chatText+ "</br><br></br></td></tr>");
 }
 function showChat(message){
     let message_str = message.split(":");

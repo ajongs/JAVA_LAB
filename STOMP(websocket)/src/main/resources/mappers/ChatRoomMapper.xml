@@ -18,6 +18,7 @@
     <update id="updateChatText" parameterType="Message">
         UPDATE chatroom
         SET chatText=#{messageContent}
-        WHERE user2=#{sender}
+        WHERE (user1=#{sender} AND user2=#{receiver})
+        OR (user1=#{receiver} AND user2=#{sender})
     </update>
 </mapper>
