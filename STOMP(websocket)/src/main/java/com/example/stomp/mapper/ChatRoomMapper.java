@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface ChatRoomMapper {
-    void createChatRoom(ChatRoom chatRoom);
+    long createChatRoom(ChatRoom chatRoom);
     List<ChatRoom> findAllChatRoom(String userNickname);
     void updateChatText(Message message);
 }

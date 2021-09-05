@@ -22,6 +22,7 @@ public class ChatRoomRepository {
 
         return result;
     }
+
     public ChatRoom findRoomById(String id){
         return chatRoomMap.get(id);
     }

@@ -14,6 +14,10 @@
     <insert id="createChatRoom" parameterType="ChatRoom">
         INSERT INTO chatroom
         VALUES(null, #{user1}, #{user2}, #{chatTitle}, #{chatText}, now())
+
+        <selectKey resultType="long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
     </insert>
     <update id="updateChatText" parameterType="Message">
         UPDATE chatroom

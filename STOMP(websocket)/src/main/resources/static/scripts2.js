@@ -2,7 +2,9 @@ var stompClient = null;
 
 $(document).ready(function() {
     console.log("Index page is ready");
-    connect();
+    $("#connect").click(function(){
+        connect();
+    })
 
     $("#send").click(function() {
         sendMessage();
@@ -21,8 +23,9 @@ function connect() {
     stompClient = Stomp.over(socket);
     stompClient.connect(headers, function (frame) {
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/sub/messages/'+nickname, function (message) {
-            showMessage(message.body);
+        stompClient.subscribe('/sub/messages/'+$("#chatRoomId").val(), function (message) {
+            //showMessage(message.body);
+            showMessage2(message);
         });
 
         //stompClient.subscribe('/user/topic/private-messages', function (message) {
@@ -34,13 +37,17 @@ function connect() {
 function showMessage(message) {
     $("#messages").append("<tr><td>" + message + "</td></tr>");
 }
-
+function showMessage2(message){
+    $("#messages").append("<tr><td>"+message.headers.sender+ " : " + message.body + "</td></tr>");
+}
+function notify(){
+    alert("안녕하세요");
+}
 function sendMessage() {
     console.log("sending message");
     stompClient.send("/pub/message", headers, JSON.stringify({'messageContent': $("#message").val(),
-    'receiver':$("#receiver").val()}));
+    'receiver':$("#receiver").val(), 'chatRoomId':$("#chatRoomId").val()}));
 }
-
 function sendPrivateMessage() {
     console.log("sending private message");
     stompClient.send("/pub/private-message", {}, JSON.stringify({'messageContent': $("#private-message").val()}));

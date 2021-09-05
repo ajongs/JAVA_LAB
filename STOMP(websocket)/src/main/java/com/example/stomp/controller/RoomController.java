@@ -26,9 +26,8 @@ public class RoomController {
     }
 
     @PostMapping(value = "/room")
-    public String create(@RequestBody ChatRoom chatRoom){
-        chatRoomService.createChatRoom(chatRoom);
-        return "채팅방이 개설되었습니다.";
+    public ResponseEntity create(@RequestBody ChatRoom chatRoom){
+        return new ResponseEntity(chatRoomService.createChatRoom(chatRoom), HttpStatus.OK);
     }
     @GetMapping("/room")
     public void getRoom(String roomId){

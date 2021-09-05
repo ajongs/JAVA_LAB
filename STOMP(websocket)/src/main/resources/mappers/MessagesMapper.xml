@@ -7,6 +7,6 @@
 <mapper namespace="com.example.stomp.mapper.MessagesMapper">
     <insert id="uploadMessage" parameterType="Message">
         INSERT INTO messages
-        VALUES (#{id}, #{receiver}, #{sender}, #{messageContent}, now())
+        VALUES (#{id}, #{receiver}, #{sender}, #{messageContent}, now(), #{chatRoomId})
     </insert>
 </mapper>

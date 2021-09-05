@@ -18,8 +18,10 @@ $(document).ready(function(message) {
         .then(res=>{
             for(var i=0; i <res.length; i++){
                 showChatRoom(res[i]);
+                connectAll(res[i].id);
+                console.log(res[i].id);
             }
-        console.log(res[0].user2)});
+        });
 
     /*
         .then(async (res) => {
@@ -32,13 +34,6 @@ $(document).ready(function(message) {
      */
     connect();
 
-    $("#send").click(function() {
-        sendMessage();
-    });
-
-    $("#send-private").click(function() {
-        sendPrivateMessage();
-    });
     //동적생성 쿼리는 특정한 이벤트 처리를 해줘야함.
     $(document).on("click", "#Chat-lists tr",function(){
         var tr = $(this);
@@ -56,7 +51,7 @@ $(document).ready(function(message) {
                 user2:$("#receiver").val(),
                 chatTitle:$("#receiver").val()
             }),
-        });
+        }).then(res=>{handShake(res)});
     });
 });
 let nickname = sessionStorage.getItem('access_token')
@@ -95,14 +90,19 @@ async function getChat(){
     //.then(json => { text = json;});
     // console.log(text);
 }
+
 function connect() {
     var socket = new SockJS('/ws/stomp/chat');
     stompClient = Stomp.over(socket);
     stompClient.connect(headers, function (frame) {
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/sub/messages/'+nickname, function (message) {
+        stompClient.subscribe('/sub/messages/'+nickname, function (roomId) {
+            //여기서는 chatroom id만 받는거야
+            stompClient.subscribe("/sub/messages/"+roomId.body, function(message){
+                showChatById(message, roomId.body);
+            })
             // showMessage(message.body);
-            showChat(message.body);
+
         });
 
         //stompClient.subscribe('/user/topic/private-messages', function (message) {
@@ -111,6 +111,16 @@ function connect() {
     });
 }
 
+function connectAll(roomId){
+    var socket = new SockJS('/ws/stomp/chat');
+    stompClient = Stomp.over(socket);
+    stompClient.connect(headers, function (frame) {
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/sub/messages/'+roomId, function (message) {
+            showChatById(message, roomId);
+        })
+    });
+}
 function showChatRoom(json){
     let user="";
     if(json.user2!=nickname){
@@ -118,7 +128,7 @@ function showChatRoom(json){
     }
     else
         user = json.user1;
-    $("#Chat-lists").append("<tr><td id=\""+user+"\"><br>" + user + "</br><br>" + json.chatText+ "</br><br></br></td></tr>");
+    $("#Chat-lists").append("<tr><td id=\""+json.id+"\"><br>" + user + "</br><br>" + json.chatText+ "</br><br></br></td></tr>");
 }
 function showChat(message){
     let message_str = message.split(":");
@@ -126,19 +136,32 @@ function showChat(message){
     let payload = message_str[1];
     document.getElementById(user).innerHTML = "<tr><td id="+user+"><br>" + user + "</br><br>" + payload+ "</br><br></br></td></tr>";
 }
+function showChatById(message, roomId){
+    let user;
+    if(message.sender == nickname){
+        user = message.headers.receiver;
+    }
+    else{
+        user = message.headers.sender;
+    }
+    console.log("roomId = "+ roomId);
+    if(document.getElementById(roomId)==null){
+        $("#Chat-lists").append( "<tr><td id="+roomId+"><br>" + user + "</br><br>" + message.body+ "</br><br></br></td></tr>");
+    }
+    else{
+        document.getElementById(roomId).innerHTML = "<tr><td id="+roomId+"><br>" + user + "</br><br>" + message.body+ "</br><br></br></td></tr>";
+    }
+
+}
 function showMessage(message) {
     //$("#messages").append("<tr><td>" + message + "</td></tr>");
     $("#Chat-lists").append("<tr><td>" + message + "</td></tr>");
 }
-
-function sendMessage() {
-    console.log("sending message");
-    stompClient.send("/pub/message", headers, JSON.stringify({'messageContent': $("#message").val(),
-        'receiver':$("#receiver").val()}));
+function notify(){
+    alert("안녕하세요");
 }
-
-function sendPrivateMessage() {
-    console.log("sending private message");
-    stompClient.send("/pub/private-message", {}, JSON.stringify({'messageContent': $("#private-message").val()}));
+function handShake(id) {
+    console.log("handShake message");
+    stompClient.send("/pub/message2", headers, JSON.stringify({'messageContent': $("#message").val(),
+        'receiver':$("#receiver").val(), 'chatRoomId':id}));
 }
-

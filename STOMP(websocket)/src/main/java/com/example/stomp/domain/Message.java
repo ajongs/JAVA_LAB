@@ -8,6 +8,15 @@ public class Message {
     private String sender;
     private String messageContent;
     private Timestamp created_at;
+    private long chatRoomId;
+
+    public long getChatRoomId() {
+        return chatRoomId;
+    }
+
+    public void setChatRoomId(long chatRoomId) {
+        this.chatRoomId = chatRoomId;
+    }
 
     public long getId() {
         return id;
