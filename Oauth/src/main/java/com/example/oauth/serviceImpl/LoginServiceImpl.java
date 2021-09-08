@@ -1,5 +1,6 @@
 package com.example.oauth.serviceImpl;
 
+import com.example.oauth.domain.OauthToken;
 import com.example.oauth.service.LoginService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -33,7 +34,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public ResponseEntity<String> auth(String code) {
+    public ResponseEntity<OauthToken> getOauthToken(String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
@@ -42,10 +43,28 @@ public class LoginServiceImpl implements LoginService {
         return requestAuth(kakaoTokenRequest);
     }
 
-    private ResponseEntity<String> requestAuth(HttpEntity request){
+    private ResponseEntity<OauthToken> requestAuth(HttpEntity request){
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.exchange(
                 "https://kauth.kakao.com/oauth/token",
+                HttpMethod.POST,
+                request,
+                OauthToken.class
+        );
+    }
+
+    @Override
+    public ResponseEntity<String> getProfile(OauthToken oauthToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization","Bearer "+oauthToken.getAccess_token());
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        return requestProfile(new HttpEntity(headers));
+    }
+    private ResponseEntity<String> requestProfile(HttpEntity request){
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.exchange(
+          "https://kapi.kakao.com/v2/user/me",
                 HttpMethod.POST,
                 request,
                 String.class
