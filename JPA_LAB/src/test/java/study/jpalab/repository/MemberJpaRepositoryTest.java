@@ -64,7 +64,20 @@ class MemberJpaRepositoryTest {
         long deletedCount = memberJpaRepository.count();
         assertThat(deletedCount).isEqualTo(0);
     }
+    @Test
+    public void bulkUpdate(){
+        memberJpaRepository.save(new Member("aaa", 10));
+        memberJpaRepository.save(new Member("bbb", 20));
+        memberJpaRepository.save(new Member("ccc", 30));
+        memberJpaRepository.save(new Member("ddd", 40));
+        Member m5 = new Member("eee", 50);
+        memberJpaRepository.save(m5);
 
+        int result = memberJpaRepository.bulkAgePlus(20);
 
+        assertThat(result).isEqualTo(4);
 
+        // 벌크성 쿼리는 1차캐시(영속성컨텍스트)가 알지못함
+        assertThat(m5.getAge()).isEqualTo(50);
+    }
 }

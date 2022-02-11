@@ -10,6 +10,7 @@ spring:
       ddl-auto: create
     properties:
       hibernate:
+        # dialect : org.hibernate.dialect.Oracle10gDialect --> 방언 바꿀 수 있음
         # show_sql: true  #jpa가 실행하는 코드 콘솔에 다 찍음
         format_sql: true
 logging.level:
