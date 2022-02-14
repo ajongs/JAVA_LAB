@@ -11,7 +11,8 @@ import study.jpalab.entity.Member;
 import java.util.List;
 import java.util.Optional;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, Long> , MemberRepositoryCustom{
+    //커스텀 리포지터리 구현시 해당 인터페이스를 extends 해준다.
 
     @Query("select m from Member m where m.username = :username and m.age > :age")
     public List<Member> findUser(@Param("username") String username, @Param("age") int age);
