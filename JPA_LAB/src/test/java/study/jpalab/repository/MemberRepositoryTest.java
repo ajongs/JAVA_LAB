@@ -149,4 +149,26 @@ class MemberRepositoryTest {
         assertThat(m5.getAge()).isEqualTo(51);
 
     }
+
+    @Test
+    public void JpaEventBaseEntity() throws Exception {
+        //given
+        Member member = new Member("member1");
+        memberRepository.save(member);
+
+        Thread.sleep(100);
+        member.setUsername("member2");
+
+        entityManager.flush(); //@PreUpdate
+        entityManager.clear();
+        //when
+        Member findMember = memberRepository.findById(member.getId()).get();
+        //원래는 바로 get 해서 엔티티 객체를 꺼내면 안댐, 공부편의성을 위해서만 사용하도록하자
+
+        //then
+        System.out.println("findMember.getCreatedDate() = " + findMember.getCreatedDate());
+        System.out.println("findMember.getLastModifiedDate() = " + findMember.getLastModifiedDate());
+        System.out.println("findMember.getCreateBy() = " + findMember.getCreateBy());
+        System.out.println("findMember.getLastModifiedBy() = " + findMember.getLastModifiedBy());
+    }
 }

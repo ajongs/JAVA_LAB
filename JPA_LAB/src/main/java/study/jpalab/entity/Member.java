@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Setter //엔티티에 세터는 없는게 국룰
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //기본 생성자 만드는 롬복 어노테이션
 @ToString(of = {"id", "username", "age"})
-public class Member {
+public class Member extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "member_id")
     private Long id;
