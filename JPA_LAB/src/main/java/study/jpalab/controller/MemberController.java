@@ -61,6 +61,12 @@ public class MemberController {
         return null;
     }
 
+    //위의 api 는 인덱스가 0부터 시작하는데
+    // 이것을 바꾸러면 1. Page 와 Pageable 을 직접 커스텀하게 구현하는 방법
+    //             2. yml 에서 one-indexed-parameters : true 로 설정
+    // 2번 방법시 주의할 점 : page 인덱스를 단순히 -1만 해주고, page 와 pageable 은 기존 -1하기전의 인덱스를 이용하여 표현을 함
+    // 따라서 실제 page 요청하는 인덱스와 내부적으로 계산되는 인덱스가 차이가 나서 오류를 낼 수 있음.
+    // 가장 좋은 방법은 index 를 그냥 0부터 사용하는 것 (어차피 서버의 규약은 정하기 나름이니)
 
 }
 
