@@ -13,6 +13,12 @@ spring:
         # dialect : org.hibernate.dialect.Oracle10gDialect --> 방언 바꿀 수 있음
         # show_sql: true  #jpa가 실행하는 코드 콘솔에 다 찍음
         format_sql: true
+
+  data:
+    web:
+      pageable:
+        default-page-size: 10 # page size 설정 변경 (Global)
+        max-page-size: 2000  #최대 페이지 사이즈
 logging.level:
   org.hibernate.SQL: debug
   #org.hibernate.type: trace  #파라미터 바인딩 까지 볼 수 있음
